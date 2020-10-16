@@ -1,0 +1,38 @@
+= Simple App deployed on Docker
+
+This small project represents a simple Spring Reactive Web Application, that gets built into a JAR and deployed on a JDK15 Docker image.
+
+This is the Docker image used: https://hub.docker.com/layers/openjdk/library/openjdk/15-jdk/images/sha256-47618f06e1510c9d6651d783669c1a0099e401006c9656acf5328fd0cb90d954?context=explore[openjdk:15-jdk].
+
+=== Build the sourcecode
+
+Compile the code and build the Docker image:
+```
+ gradle clean build prepareForDocker generateDockerfile docker
+```
+Start a Docker container from the image:
+```
+gradle dockerRun
+```
+Stop the container:
+```
+gradle dockerRun
+```
+
+=== Spring Boot Reference Documentation
+
+For further reference, please consider the following sections:
+
+* https://github.com/palantir/gradle-docker[The Palantir Docker Gradle Plugin]
+* https://docs.gradle.org[Official Gradle documentation]
+* https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/gradle-plugin/reference/html/[Spring Boot Gradle Plugin Reference Guide]
+* https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/gradle-plugin/reference/html/#build-image[Create an OCI image]
+* https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/reference/htmlsingle/#configuration-metadata-annotation-processor[Spring Configuration Processor]
+* https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/reference/htmlsingle/#using-boot-devtools[Spring Boot DevTools]
+
+=== Additional Links
+
+These additional references should also help you:
+
+* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
+

@@ -54,31 +54,36 @@ jar {
     }
 }
 
+/*task prepareForDocker {
+    doLast {
+        println (" >> Preparing for dockerRun...")
+        println ("... Ready for running 'gradle dockerRun'")
+    }
+}*/
+
 task prepareForDocker(type: Copy) {
     from "$buildDir/libs"
-    into "."
+    into "$buildDir/libs/"
     rename "${project.name}-${project.version}.jar", "${project.name}.jar"
 }
 
-task generateDockerfile () {
-    println('Generating Dockerfile...')
-    def dockerFile = new BufferedWriter(new FileWriter(new File("Dockerfile")))
-    dockerFile.append("FROM openjdk:15-jdk\n")
-    dockerFile.append("COPY ${project.name}.jar ${project.name}.jar\n")
-    dockerFile.append("CMD [\"java\",\"-jar\",\"simple-app.jar\"]\n")
-    dockerFile.flush()
-    dockerFile.close()
-    println('...Done.')
+task generateDockerfile {
+   doLast {
+       println(" >> Generating Dockerfile ")
+       def dockerFile = new BufferedWriter(new FileWriter(new File("$buildDir/libs/Dockerfile")))
+       dockerFile.append("FROM openjdk:15-jdk\n")
+       dockerFile.append("COPY ${project.name}.jar ${project.name}.jar\n")
+       dockerFile.append("CMD [\"java\",\"-jar\",\"simple-app.jar\"]\n")
+       dockerFile.flush()
+       dockerFile.close()
+   }
 }
 
 docker {
-    dependsOn generateDockerfile
-    println("Creating docker image ...")
     name "${project.name}:${project.version}"
-    files "${project.name}.jar"
-    dockerfile file("Dockerfile")
+    files "$buildDir/libs/${project.name}.jar"
+    dockerfile file("$buildDir/libs/Dockerfile")
     tag 'DockerHub', "iuliana/simple-boot-docker:${project.version}"
-    println('...Done.')
 }
 
 dockerRun {
