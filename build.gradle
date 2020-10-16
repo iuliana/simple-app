@@ -1,0 +1,75 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'com.palantir.docker' version '0.25.0'  // works with to Gradle 6.5.1
+    id 'com.palantir.docker-run' version "0.25.0" // works with to Gradle 6.5.1
+    id 'java'
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
+    options.encoding = "UTF-8"
+}
+
+compileTestJava {
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
+    options.encoding = "UTF-8"
+    options.compilerArgs += "-parameters"
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'io.projectreactor:reactor-test'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes(
+                "Created-By": System.getProperty('java.version'),
+                "Specification-Title": "Simple Spring Boot Reactive Application deployed into a Docker jdk5 container",
+                "Implementation-Version": "${project.version}",
+                "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+        )
+    }
+}
+
+task prepareForDocker(type: Copy) {
+    from "$buildDir/libs"
+    into "."
+    rename "${project.name}-${project.version}.jar", "${project.name}.jar"
+}
+
+docker {
+    name "${project.name}:${project.version}"
+    files "${project.name}.jar"
+    dockerfile file('Dockerfile')
+    tag 'DockerHub', "iuliana/simple-boot-docker:${project.version}"
+}
+
+dockerRun {
+    name "${project.name}"
+    image "${project.name}:${project.version}"
+    ports '8080:8080'
+    clean true
+}
