@@ -16,7 +16,7 @@ public class SimpleAppApplication {
         SpringApplication.run(SimpleAppApplication.class, args);
     }
 
-    static HandlerFunction<ServerResponse> indexFct = serverRequest -> ok().contentType(MediaType.TEXT_HTML).bodyValue("This works!");
+    private static HandlerFunction<ServerResponse> indexFct = serverRequest -> ok().contentType(MediaType.TEXT_HTML).bodyValue("It works!");
 
     @Bean
     public RouterFunction<ServerResponse> router(){

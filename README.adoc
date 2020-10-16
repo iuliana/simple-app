@@ -7,17 +7,34 @@ This is the Docker image used: https://hub.docker.com/layers/openjdk/library/ope
 === Build the sourcecode
 
 Compile the code and build the Docker image:
-```
- gradle clean build prepareForDocker generateDockerfile docker
-```
+[source,bash]
+----
+gradle clean build prepareForDocker generateDockerfile docker
+----
 Start a Docker container from the image:
-```
+[source,bash]
+----
 gradle dockerRun
-```
+----
 Stop the container:
-```
-gradle dockerRun
-```
+[source,bash]
+----
+gradle dockerStop
+----
+
+=== Build an OCI image and run it using Docker
+
+Build the image:
+[source,bash]
+----
+gradle bootBuildImage --imageName=simple-app-image
+----
+Run the image using Docker:
+[source,bash]
+----
+docker run -p 8080:8080 -t simple-app-image
+----
+Stop the app by using `Ctrl+C`
 
 === Spring Boot Reference Documentation
 

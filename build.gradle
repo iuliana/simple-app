@@ -31,7 +31,6 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -53,13 +52,6 @@ jar {
         )
     }
 }
-
-/*task prepareForDocker {
-    doLast {
-        println (" >> Preparing for dockerRun...")
-        println ("... Ready for running 'gradle dockerRun'")
-    }
-}*/
 
 task prepareForDocker(type: Copy) {
     from "$buildDir/libs"
