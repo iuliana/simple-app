@@ -65,7 +65,7 @@ task generateDockerfile {
        def dockerFile = new BufferedWriter(new FileWriter(new File("$buildDir/libs/Dockerfile")))
        dockerFile.append("FROM openjdk:15-jdk\n")
        dockerFile.append("COPY ${project.name}.jar ${project.name}.jar\n")
-       dockerFile.append("CMD [\"java\",\"-jar\",\"simple-app.jar\"]\n")
+       dockerFile.append("CMD [\"java\",\"-jar\",\"${project.name}.jar\"]\n")
        dockerFile.flush()
        dockerFile.close()
    }
@@ -75,7 +75,7 @@ docker {
     name "${project.name}:${project.version}"
     files "$buildDir/libs/${project.name}.jar"
     dockerfile file("$buildDir/libs/Dockerfile")
-    tag 'DockerHub', "iuliana/simple-boot-docker:${project.version}"
+    tag 'simple-app', "iuliana/simple-app:${project.version}"
 }
 
 dockerRun {
