@@ -21,7 +21,11 @@ Stop the container:
 ----
 gradle dockerStop
 ----
-
+Use an alias to rebuild the project, recreate the Docker image and start the container.
+[source,bash]
+----
+alias appgo='gradle clean build prepareForDocker generateDockerfile docker dockerRun'
+----
 === Build an OCI image and run it using Docker
 
 Build the image:
