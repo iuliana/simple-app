@@ -21,10 +21,21 @@ public class SimpleAppApplication {
 
     private static HandlerFunction<ServerResponse> indexFct = serverRequest -> ok().contentType(MediaType.TEXT_HTML).bodyValue("It works!");
 
+    private static HandlerFunction<ServerResponse> loadFct = serverRequest -> {
+        final int NUM_TESTS = 1000;
+        for (int i = 0; i < NUM_TESTS; i++) {
+            long sleepTime = 250*1000000L; // convert to nanoseconds
+            long startTime = System.nanoTime();
+            while ((System.nanoTime() - startTime) < sleepTime) {}
+        }
+        return ok().contentType(MediaType.TEXT_HTML).bodyValue("Load Test Done!");
+    };
+
     @Bean
     public RouterFunction<ServerResponse> router(){
         return RouterFunctions.route(GET("/"), indexFct)
                 .andRoute(GET("/index.htm"), indexFct)
-                .andRoute(GET("/index"), indexFct);
+                .andRoute(GET("/index"), indexFct)
+                .andRoute(GET("/load"), loadFct);
     }
 }
